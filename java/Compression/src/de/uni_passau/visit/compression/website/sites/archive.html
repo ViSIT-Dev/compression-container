@@ -1,0 +1,41 @@
+<div>
+    <h2>Auftrags-Archiv</h2>
+
+    <div data-ng-controller="archiveController">
+        <p data-ng-show="archiveItems.length == 0">Es wurden noch keine Kompressionsaufträge durchgeführt.</p>
+        <p data-ng-show="archiveItems.length > 0">Diese Auflistung enthält die zuletzt abgeschlossenen Kompressionsaufträge:</p>
+        <div class="card" data-ng-repeat="current in archiveItems">
+            <div class="card-header" data-ng-switch="current.state">
+                <strong data-ng-switch-when="ENQUEUED" class="text-primary">Warte auf Abarbeitung</strong>
+                <strong data-ng-switch-when="PROCESSING" class="text-warning">Wird verarbeitet</strong>
+                <strong data-ng-switch-when="COMPLETED" class="text-success">Erfolgreich abgeschlossen</strong>
+                <strong data-ng-switch-when="ERROR" class="text-danger">Fehlerhaft abgeschlossen</strong>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{current.job.title}}</h5>
+                <div class="card-text job-details">
+                    <div><em class="details-label">Datei: </em>
+			{{current.job.basePath + "/" + current.job.objectUid + "." + current.job.mediaUid}}</div>
+                    <div><em class="details-label">Dateityp: </em>
+                        <span data-ng-switch="current.job.mimeType">
+                            <span data-ng-switch-when="text/plain">OBJ-3D-Modell</span>
+                            <span data-ng-switch-when="image/jpeg">JPEG-Bild</span>
+                            <span data-ng-switch-when="image/png">PNG-Bild</span>
+                        </span>
+                    </div>
+		    <div data-ng-show="current.job.mimeType == 'text/plain'">
+		        <em class="details-label">Kompressionsstufen: </em>
+                    	<ul class="level-list"><li data-ng-repeat="level in current.job.levels">{{level}}</li></ul>
+		    </div>
+
+                </div>
+            </div>
+            <small class="card-footer text-muted">
+                Abgesetzt am {{(current.receivedOn * 1000) | date : 'dd.MM.yyyy, HH:mm:ss'}} Uhr; Letzte Statusänderung am {{(current.lastStateChange * 1000) | date : 'dd.MM.yyyy, HH:mm:ss'}} Uhr;
+            </small>
+        </div>
+    </div>
+    
+    <div id="alertPlaceholder">
+    </div>
+</div>

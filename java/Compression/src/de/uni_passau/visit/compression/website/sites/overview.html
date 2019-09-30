@@ -1,0 +1,76 @@
+<div>
+    <h2>Übersicht</h2>
+
+    <div data-ng-controller="overviewStateController">
+        <h3>System-Status</h3>
+        <p>Aktueller Zustand des Systems: <em>{{currentStateStr}}</em></p>
+        <div class="form-group">
+            <button type="button" class="btn btn-success" data-ng-click="updateState('RUN')" data-ng-disabled="!(currentState == 'STARTUP' || currentState == 'PAUSED')">Abarbeitung starten</button>
+            <button type="button" class="btn btn-warning" data-ng-click="updateState('PAUSE')" data-ng-disabled="!(currentState == 'RUNNING')">Abarbeitung pausieren</button>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#shutdownTypeModal" data-ng-disabled="currentState == 'SHUTDOWN'">System herunterfahren</button>
+            <!-- Modal -->
+            <div class="modal fade" id="shutdownTypeModal" tabindex="-1" role="dialog" aria-labelledby="shutdownTypeModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shutdownTypeModalLabel">System herunterfahren</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bitte wählen Sie zwischen den folgenden Optionen zum herunterfahren des Kompressions-Systems:</p>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-warning btn-block" data-ng-click="updateState('SHUTDOWN_PROCESS_QUEUE')" data-ng-disabled="currentState == 'SHUTTINGDOWN' || currentState == 'SHUTDOWN'" data-dismiss="modal">Ausstehende Aufträge abarbeiten</button>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-warning btn-block" data-ng-click="updateState('SHUTDOWN_IMMEDIATELY')" data-ng-disabled="currentState == 'SHUTTINGDOWN' || currentState == 'SHUTDOWN'" data-dismiss="modal">Aktuellen Auftrag abarbeiten</button>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger btn-block" data-ng-click="updateState('KILL')" data-ng-disabled="currentState == 'SHUTDOWN'" data-dismiss="modal">Sofort beenden</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div data-ng-controller="overviewJobsController">
+        <h3>Ausstehende Aufträge</h3>
+        <p data-ng-show="queueItems.length == 0">Derzeit stehen keine Kompressionsaufträge aus oder befinden sich in Verarbeitung.</p>
+        <p data-ng-show="queueItems.length > 0">Derzeit stehen die folgenden Kompressionsaufträge aus oder befinden sich in Verarbeitung:</p>
+        <div class="card" data-ng-repeat="current in queueItems">
+            <div class="card-header" data-ng-switch="current.state">
+                <strong data-ng-switch-when="ENQUEUED" class="text-primary">Warte auf Abarbeitung</strong>
+                <strong data-ng-switch-when="PROCESSING" class="text-warning">Wird verarbeitet</strong>
+                <strong data-ng-switch-when="ERROR" class="text-success">Erfolgreich abgeschlossen</strong>
+                <strong data-ng-switch-when="COMPLETED" class="text-danger">Fehlerhaft abgeschlossen</strong>
+                <img class="cancel-job" data-ng-click="cancelJob(current.id, current.job.title)" src="img/delete.png" title="Auftrag abbrechen" alt="Auftrag abbrechen"></img>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{current.job.title}}</h5>
+                <div class="card-text job-details">
+                    <div><em class="details-label">Datei: </em>
+			{{current.job.basePath + "/" + current.job.objectUid + "." + current.job.mediaUid}}</div>
+                    <div><em class="details-label">Dateityp: </em>
+                        <span data-ng-switch="current.job.mimeType">
+                            <span data-ng-switch-when="text/plain">OBJ-3D-Modell</span>
+                            <span data-ng-switch-when="image/jpeg">JPEG-Bild</span>
+                            <span data-ng-switch-when="image/png">PNG-Bild</span>
+                        </span>
+                    </div>
+		    <div data-ng-show="current.job.mimeType == 'text/plain'">
+		        <em class="details-label">Kompressionsstufen: </em>
+                    	<ul class="level-list"><li data-ng-repeat="level in current.job.levels">{{level}}</li></ul>
+		    </div>
+                </div>
+            </div>
+            <small class="card-footer text-muted">
+                Abgesetzt am {{(current.receivedOn * 1000) | date : 'dd.MM.yyyy, HH:mm:ss'}} Uhr; Letzte Statusänderung am {{(current.lastStateChange * 1000) | date : 'dd.MM.yyyy, HH:mm:ss'}} Uhr;
+            </small>
+        </div>
+    </div>
+    
+    <div id="alertPlaceholder">
+    </div>
+</div>

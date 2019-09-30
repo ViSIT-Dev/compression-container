@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title>ViSIT - Kompressionssystem</title>
+
+    <!-- Bootstrap -->
+    <link href="vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+	
+    <!-- bootstrap-progressbar -->
+    <link href="vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="css/custom.css" rel="stylesheet">
+	
+	<link href="css/compression.css" rel="stylesheet">
+  </head>
+
+  <body class="nav-md" data-ng-app="compression">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <br />
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>Kompression</h3>
+                <ul class="nav side-menu">
+                  <li><a href="#!/overview"><i class="fa fa-home"></i> Übersicht</a>
+                  </li>
+                  <li><a href="#!/dispatch"><i class="fa fa-plus-circle"></i> Neuer Auftrag</a>
+                  </li>
+                  <li><a href="#!/archive"><i class="fa fa-archive"></i> Archiv</a>
+                  </li>
+                  <li><a href="#!/settings"><i class="fa fa-cogs"></i> Einstellungen</a>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <img src="img/interreg.png" class="nav-bar-img" alt="interreg">
+                </li>
+                <li class="">
+                    <img src="img/ViSIT_Logo_web.png" class="nav-bar-img" alt="interreg">
+                </li>
+
+
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+		<div data-ng-view class="right_col" role="main"></div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            ViSIT - gefördert durch Interreg
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="vendors/Flot/jquery.flot.js"></script>
+    <script src="vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="vendors/Flot/jquery.flot.time.js"></script>
+    <script src="vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="vendors/moment/min/moment.min.js"></script>
+    <script src="vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="js/custom.min.js"></script>
+	
+	<script src="3rdparty/jquery-3.3.1/js/jquery.min.js"></script>
+	<script src="3rdparty/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+	<script src="3rdparty/angular-1.7.2/js/angular.min.js"></script>
+	<script src="3rdparty/angular-1.7.2/js/angular-route.min.js"></script>
+	
+	<script>
+		var app = angular.module("compression", ["ngRoute"]);
+		
+		app.config(function($routeProvider) {
+			$routeProvider
+			.when("/", {
+				templateUrl : "sites/overview.html"
+			})
+			.when("/overview", {
+				templateUrl : "sites/overview.html"
+			})
+			.when("/dispatch", {
+				templateUrl : "sites/dispatch.html"
+			})
+			.when("/archive", {
+				templateUrl : "sites/archive.html"
+			})
+			.when("/settings", {
+				templateUrl : "sites/settings.html"
+			});
+		});
+		
+		function getAlertHtml(success, message) {
+            var alertClass = success ? "alert-success" : "alert-danger";
+            var html = '<div class="alert '+alertClass+' fade show text-xs-left"><a href="#" class="close" data-dismiss="alert" aria-label="close" onClick="return false">&times;</a>'+message+'</div>';
+            return html;
+		}
+		
+		app.factory('ajax', ['$http', function($http) {
+            return function(method, module, action, data, successHandler, failHandler, finallyHandler, placeholder, showSuccessMessage) {
+                var tryMax = 3;
+                var placeholderId = (typeof placeholder != "undefined" && placeholder != null) ? placeholder : "#alertPlaceholder";
+                
+                var internalCall = function(tryNum) {
+                    var fun = null;
+                    
+                    if(method == "GET") {
+                        fun = $http.get;
+                    } else if(method == "POST") {
+                        fun = $http.post;
+                    } else if(method == "PUT") {
+                        fun = $http.put;
+                    } else if(method == "DELETE") {
+                        fun = $http.delete;
+                    }
+                    
+                    fun("api/"+module+"/"+action, data).then(function(response) {
+                        console.log(response);
+                        
+                        var message = "";
+                        if(typeof response.data.message == "undefined") {
+                                    message = "Es ist ein serverseitiger Fehler auftreten. Bitte informieren Sie den Systemadministrator.";
+                        } else {
+                                    message = response.data.message;
+                        }
+                        
+                        if(response.data.success) {
+                            if (typeof successHandler != 'undefined' && successHandler != null) {
+                                successHandler(response.data);
+                            } 
+                            
+                            if(typeof showSuccessMessage != "undefined" && showSuccessMessage != null && showSuccessMessage) {
+                                $(placeholderId).html(getAlertHtml(response.data.success, message));
+                            }
+                        } else {
+                            if (typeof failHandler != 'undefined' && failHandler != null) {
+                                failHandler(response.data);
+                            } else {
+                                console.log(response.data);
+                                                      
+                                $(placeholderId).html(getAlertHtml(response.data.success, message));
+                            }
+                        }
+                        
+                        if (typeof finallyHandler != 'undefined' && finallyHandler != null) {
+                                finallyHandler(response.data);
+                        }
+                    }, function(response) {
+                        if(tryNum >= internalCall) {
+                            internalCall(tryNum + 1);
+                        } else {
+                            $(placeholderId).html(getAlertHtml(false, "Die Daten können vom Server nicht abgerufen werden. Eventuell ist dieser derzeit nicht erreichbar."));
+                        }
+                    });
+                };
+                
+                internalCall(1);
+            };
+    }]);
+	</script>
+	
+    <script src="js/dispatchController.js"></script>
+    <script src="js/overviewJobsController.js"></script>
+    <script src="js/overviewStateController.js"></script>
+    <script src="js/archiveController.js"></script>
+    <script src="js/settingsController.js"></script>
+	
+  </body>
+</html>

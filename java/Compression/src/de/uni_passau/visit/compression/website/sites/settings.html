@@ -1,0 +1,129 @@
+<div data-ng-controller="settingsController">
+    <h2>Einstellungen</h2>
+    <form role="form" name="configForm" id="configForm">
+        <h3>Grundkonfiguration</h3>
+        <div class="form-group">
+            <label for="apiPort">Portnummer der API-Schnittstelle:</label>
+            <input type="number" name="apiPort" id="apiPort" data-ng-model="apiPort" class="form-control" min="1" max="65536" required></input>
+        </div>
+        <div class="form-group">
+            <label for="queueMaxLength">Maximale Länge der Auftragsliste:</label>
+            <input type="number" name="queueMaxLength" id="queueMaxLength" data-ng-model="queueMaxLength" class="form-control" min="1" required></input>
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="autostart" data-ng-model="autostart">
+                <label class="form-check-label" for="autostart">Abarbeitung automatisch beim Starten des Servers beginnen</label>
+            </div>
+        </div>
+        
+        <h3>API-Zugriffsberechtigte IP-Adressen</h3>
+        <p>Ein Zugriff auf die Kompressions-API ist nur von den unten aufgeführten IP-Adressen zulässig. Um den Zugriff von allen IP-Adressen zuzulassen erstellen Sie einen Eintrag "*".</p>
+        <div class="form-group">
+            <ul class="list-group">
+                <li class="list-group-item" data-ng-repeat="current in apiAccessWhitelist">{{current}}
+				<i data-ng-click="deleteWhitelistEntry(current)" class="fa fa-trash remove-entry"></i></li>
+            </ul>
+            <p data-ng-show="apiAccessWhitelist.length == 0">Es wurden keine zugriffsberechtigten IP-Adressen festgelegt.</p>
+        </div>
+        <div class="form-group">
+            <label for="newWhitelistEntry">IP-Adresse eines Zugriffsberechtigten Hosts:</label>
+            <input type="text" name="newWhitelistEntry" id="newWhitelistEntry" data-ng-model="newWhitelistEntry" class="form-control"></input>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary" data-ng-click="addWhitelistEntry(newWhitelistEntry)" data-ng-disabled="!isAddWhitelistEntryValid(newWhitelistEntry)">IP-Adresse hinzufügen</button>
+        </div>
+        
+        <h3>Standard-Kompressionsstufen für 3D-Modelle</h3>
+        
+        <p>Wird die automatische Kompression von 3D-Modellen durchgeführt, werden die folgenden Kompressionsstufen generiert:</p>
+        <div class="form-group">
+            <ul class="list-group">
+                <li class="list-group-item" data-ng-repeat="level in defaultLevels">{{level}} <i data-ng-click="deleteLevel(level)" class="fa fa-trash remove-entry"></i></li>
+            </ul>
+            <p data-ng-show="defaultLevels.length == 0">Es wurden keine Kompressionsstufen festgelegt.</p>
+        </div>
+        <div class="form-group">
+            <label for="newLevelSize">Weitere Kompressionsstufe (Anzahl Vertices):</label>
+            <input type="text" name="newLevelSize" id="newLevelSize" data-ng-model="newLevelSize" class="form-control"></input>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary" data-ng-click="addLevel()" data-ng-disabled="!isAddLevelValid()">Kompressionsstufe hinzufügen</button>
+        </div>
+        
+        <h3>Kompression der Textur von 3D-Modellen</h3>
+        
+        <div class="container-fluid">
+            <div class="row h-form" data-ng-repeat="index in textureLevelIndices">
+                <div class="col col-md-6 col-lg-3 form-group h-form-label-col">
+                    <label for="textureLevelLimits{{index}}">Für Modelle bis</label>
+                </div>
+                <div class="col col-md-6 col-lg-3 form-group">
+                    <input type="number" min="1" name="textureLevelLimits{{index}}" id="textureLevelLimits{{index}}" data-ng-model="textureLevelLimits[index]" data-ng-change="checkLevelLimit(index)" class="form-control">
+                </div>
+                <div class="col col-md-6 col-lg-3 form-group h-form-label-col">
+                    <label for="textureLevelSizes{{index}}">Vertices verwende Texturgröße</label>
+                </div>
+                <div class="col col-md-6 col-lg-3 form-group">
+                    <select name="textureLevelSizes{{index}}" id="textureLevelSizes{{index}}" data-ng-model="textureLevelSizes[index]" class="form-control" data-ng-options="current for current in textureSizeOptions">
+                    </select>
+                </div>
+            </div>
+            <div class="row h-form">
+                <div class="col col-md-6 col-lg-3 form-group h-form-label-col">
+                    <label for="textureLevel2Limit">Für größere Modelle</label>
+                </div>
+                <div class="col col-md-6 col-lg-3">
+                </div>
+                <div class="col col-md-6 col-lg-3 form-group h-form-label-col">
+                    <label for="greatestTextureSize">verwende Texturgröße</label>
+                </div>
+                <div class="col col-md-6 col-lg-3 form-group">
+                    <select name="greatestTextureSize" id="greatestTextureSize" data-ng-model="greatestTextureSize" class="form-control" data-ng-options="current for current in textureSizeOptions">
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary" data-ng-click="addTextureLimit()">Unterscheidung hinzufügen</button>
+            <button type="button" class="btn btn-secondary" data-ng-click="removeTextureLimit()" data-ng-disabled="textureLevelIndices.length <= 0">Unterscheidung entfernen</button>
+        </div>
+
+        <h3>Aktionen für die Kompression von Bildern</h3>
+        
+        <p>Bei der Kompression von Bildern werden komprimierte Versionen mit den folgenden konfigurierbaren maximalen Auflösungen generiert:</p>
+        <div class="form-group">
+            <ul class="list-group">
+                <li class="list-group-item" data-ng-repeat="current in imageCompressionLevels">{{current.title}} ({{current.maxWidth}} x {{current.maxHeight}})
+				<i data-ng-click="deleteImageCompressionLevel(current)" class="fa fa-trash remove-entry"></i></li>
+            </ul>
+            <p data-ng-show="imageCompressionLevels.length == 0">Es wurden keine Auflösungsstufen für die Kompression von Bildern festgelegt.</p>
+        </div>
+        <div class="form-group">
+            <label for="newImageCompressionLevelTitle">Titel für die neue Kompressionsstufe:</label>
+            <input type="text" name="newImageCompressionLevelTitle" id="newImageCompressionLevelTitle" data-ng-model="newImageCompressionLevelTitle" class="form-control" pattern="[A-Za-z0-9_\-]+"></input>
+            <p class="form-text text-muted">Der Titel darf keine Umlaute oder Sonderzeichen mit Ausnahme von Binde- und Unterstrichen beinhalten.</p>
+        </div>
+        <div class="form-group">
+            <label for="newImageCompressionLevelMaxWidth">Maximale Breite der neuen Kompressionsstufe:</label>
+            <input type="number" min="1" name="newImageCompressionLevelMaxWidth" id="newImageCompressionLevelMaxWidth" data-ng-model="newImageCompressionLevelMaxWidth" class="form-control"></input>
+        </div>
+        <div class="form-group">
+            <label for="newImageCompressionLevelMaxHeight">Maximale Höhe der neuen Kompressionsstufe:</label>
+            <input type="number" min="1" name="newImageCompressionLevelMaxHeight" id="newImageCompressionLevelMaxHeight" data-ng-model="newImageCompressionLevelMaxHeight" class="form-control"></input>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary" data-ng-click="addImageCompressionLevel()" data-ng-disabled="!isAddImageCompressionLevelValid()">Kompressionsstufe hinzufügen</button>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" data-ng-click="submit()" data-ng-disabled="!isFormValid()">Einstellungen speichern</button>
+        </div>
+        
+        <p><em>Hinweis:</em> Einige Änderungen von Einstellungen treten erst nach einem Neustart des Servers inkraft.</p>
+        
+        <div id="alertPlaceholder">
+        </div>
+    </form>
+</div>

@@ -1,0 +1,119 @@
+ul.level-list {
+  display: inline;
+  list-style: none;
+  padding-left:0;
+}
+
+ul.level-list li {
+  display: inline;
+}
+
+ul.level-list li:after {
+  content: ", ";
+}
+
+ul.level-list li:last-child:after {
+    content: "";
+}
+
+.card {
+	margin:1em 0;
+	background-color:#FFFFFF;
+	border:1px solid #73879C;
+	padding:1em;
+}
+
+.card h5 {
+	font-size:125%;
+}
+
+.card .card-footer {
+	color: #73879C;
+	display: inline-block;
+	margin-top:1em;
+}
+
+img.cancel-job, img.remove-level, img.remove-entry {
+	float:right; 
+	cursor:pointer;
+}
+
+.remove-entry {
+	float:right;
+	cursor:pointer;
+	font-size:150%;
+}
+
+/*.job-details table {
+	table-layout:fixed;
+}
+
+.job-details td {
+	padding: 0.25em;
+	vertical-align: top;
+}
+
+.job-details td div {
+	overflow:hidden;
+}*/
+
+.job-details .details-label {
+	display: inline-block;
+	min-width: 10em;
+}
+
+.card-header {
+	font-size:125%;
+}
+
+input[type="checkbox"] + label.form-check-label, input[type="radio"] + label.form-check-label {
+    margin-left:1em;
+}
+
+body {
+	overflow:hidden;
+}
+
+.container.body, .main_container, .right_col {
+	position:relative;
+	height:100%;
+}	
+
+.main_container {
+	display:flex;
+	flex-direction:column;	
+}
+
+.nav_menu {
+	margin-bottom:0;
+}
+
+.right_col {
+	overflow:auto;
+}
+
+.right_col h2 {
+	font-size:30px;
+}
+
+.left_col {
+	width:100%;
+}
+
+.container-fluid {
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.h-form .h-form-label-col {
+	height:34px;
+    padding:0;
+}
+
+.h-form .h-form-label-col label {
+	line-height:32px;
+}
+
+.text-warning {
+	color:#f0ad4e;
+}

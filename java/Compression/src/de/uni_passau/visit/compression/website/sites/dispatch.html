@@ -1,0 +1,59 @@
+<div data-ng-controller="dispatchController">
+    <h2>Neuen Auftrag absetzen</h2>
+    <form role="form" name="dispatchForm">
+        <h3>Basisdaten</h3>
+        <div class="form-group">
+            <label for="basepath">Basis-Pfad:</label>
+            <input type="text" name="basepath" id="basepath" data-ng-model="basepath" class="form-control"></input>
+        </div>
+        <div class="form-group">
+            <label for="objectUid">Objekt-Identifikator (UID):</label>
+            <input type="text" name="objectUid" id="objectUid" data-ng-model="objectUid" class="form-control" required></input>
+        </div>
+        <div class="form-group">
+            <label for="mediaUid">Medien-Identifikator (UID):</label>
+            <input type="text" name="mediaUid" id="mediaUid" data-ng-model="mediaUid" class="form-control" required></input>
+        </div>
+        <div class="form-group">
+            <label for="filetitle">Datei-Titel:</label>
+            <input type="text" name="filetitle" id="filetitle" data-ng-model="filetitle" class="form-control" required></input>
+        </div>
+        <div class="form-group">
+            <label for="mimetype">Dateityp:</label>
+            <select name="mimetype" id="mimetype" data-ng-model="mimetype" class="form-control" required>
+                <option value="image/png">PNG-Bild</option>
+                <option value="image/jpeg">JPEG-Bild</option>
+                <option value="text/plain">OBJ-3D-Modell</option>
+            </select>
+        </div>
+        
+        <h3>Kompressionsstufen</h3>
+        <div class="form-group">
+            <ul class="list-group">
+                <li class="list-group-item" data-ng-repeat="level in levels">{{level}} <i data-ng-click="deleteLevel(level)" class="fa fa-trash remove-entry"></i></li>
+            </ul>
+            <p data-ng-show="levels.length == 0">Es wurden keine Kompressionsstufen festgelegt.</p>
+        </div>
+        <div class="form-group">
+            <label for="newLevelType">Weitere Kompressionsstufe:</label>
+            <select name="newLevelType" id="newLevelType" data-ng-model="newLevelType" class="form-control">
+                <option value="Automatisch">Automatisch</option>
+                <option value="Fixed" selected="selected">Feste Größe</option>
+            </select>
+        </div>
+        <div class="form-group" data-ng-show="newLevelType == 'Fixed'">
+            <label for="newLevelSize">Anzahl der Vertices:</label>
+            <input type="text" name="newLevelSize" id="newLevelSize" data-ng-model="newLevelSize" class="form-control"></input>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary" data-ng-click="addLevel(newLevelType, newLevelSize)" data-ng-disabled="!isAddLevelValid(newLevelType, newLevelSize)">Kompressionsstufe hinzufügen</button>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" data-ng-click="submit()" data-ng-disabled="!isFormValid()">Auftrag absetzen</button>
+        </div>
+        
+        <div id="alertPlaceholder">
+        </div>
+    </form>
+</div>
